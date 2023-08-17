@@ -1,0 +1,14 @@
+{
+    "discord":{
+        "bot":{"token":""}
+    },
+    "naver":{
+        "dictionary":{"id":"","secret":""}
+    },
+    "korean":{
+        "dictionary":{"key":""}
+    },
+    "twitch":{
+        "api":{"id":"","secret":""}
+    }
+}
