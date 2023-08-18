@@ -16,5 +16,6 @@ bot = commands.Bot(command_prefix=command_prefix,intents=intents)
 async def on_ready():
     print('your bot is ready!')
     await ac.add_all(bot)
+    await bot.tree.sync()
 
 bot.run(TOKEN)
