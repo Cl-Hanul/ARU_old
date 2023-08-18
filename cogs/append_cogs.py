@@ -1,11 +1,13 @@
 import discord as ds
 from discord.ext import commands
 
-from cogs import twitch
+from cogs.twitch import Twitch
+from cogs.item import Item
 
 async def add_all(bot:commands.Bot):
     cogs = [
-        {"name":"twitch","cog":twitch.Twitch(bot)}
+        {"name":"twitch","cog":Twitch(bot)},
+        {"name":"item","cog":Item(bot)}
     ]
     
     for i in cogs:
