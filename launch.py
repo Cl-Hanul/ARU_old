@@ -27,7 +27,7 @@ async def on_ready():
     await bot.tree.sync()
     
     #상태 변경
-    await bot.change_presence(activity=ds.Activity(name='`~help`',type=ds.ActivityType.listening))    
+    await bot.change_presence(activity=ds.Activity(name='아르는 `~help`를',type=ds.ActivityType.listening))    
 
 #실행
 bot.run(TOKEN)

@@ -8,8 +8,10 @@ import json
 from API.twitch_API import get_stream,get_user
 
 def getStreamLogin(StreamLinkOrLogin:str) -> str:
+    #twitch.tv/ 제거
     if "twitch.tv/" in StreamLinkOrLogin:
         StreamLogin = StreamLinkOrLogin[StreamLinkOrLogin.find('twitch.tv/')+10:]
+        #로그인 뒷부분 제거
         if '/' in StreamLogin:
             StreamLogin = StreamLogin[:StreamLogin.find('/')]
         return StreamLogin
@@ -46,7 +48,6 @@ class Twitch(commands.Cog):
             if StreamData.stream:               
                 #임베드 생성 및 전송
                 for ChannelId in InfromList[StreamLogin]:
-                    print(ChannelId)
                     InformChannel = self.bot.get_channel(ChannelId)
                     
                     if ChannelId not in self.Informed[StreamLogin]:
@@ -65,7 +66,8 @@ class Twitch(commands.Cog):
                     
         
             
-    @app_commands.command(name="방송정보",description="아르가 스트리머의 정보를 가져와줘!")
+    @app_commands.command(name="방송_정보",description="아르가 스트리머의 정보를 가져와줘!\n'streaminfo'")
+    @app_commands.describe(streamlinkorlogin='스트리머의 방송 링크나 로그인을 입력해줘!')
     async def streaminfo(self,interaction:ds.Interaction,streamlinkorlogin:str):
         #스트리밍 로그인 가져오기
         StreamLogin = getStreamLogin(streamlinkorlogin)
@@ -78,8 +80,13 @@ class Twitch(commands.Cog):
             embed = ds.Embed(color=0xff7777,title='아르가 방송 정보를 불러오지 못했어.. ㅜ-ㅜ',description='입력한 `링크`나 `로그인`을 다시 확인해줘!')
             embed.set_thumbnail(url="https://static-cdn.jtvnw.net/ttv-static/404_preview-128x128.jpg")
         else:
+            #파일 불러오기
+            with open('data\\twitch.json') as file:
+                InformList = json.load(file)
             if StreamingData.stream == True:
                 #스트리머가 현재 스트리밍 중일 때
+                
+                #임베드 생성
                 embed = ds.Embed(color=0x77ff77,url=f"https://www.twitch.tv/{StreamLogin}")
                 if StreamingData.user_login == StreamingData.user_name:
                     embed.title = f"'`{StreamingData.user_login}`'님은 지금 방송하고 있어!! ≧▽≦"
@@ -100,29 +107,61 @@ class Twitch(commands.Cog):
                     embed.description = userData.description
                     embed.set_thumbnail(url=userData.profile_image_url)
                     embed.set_image(url=userData.offline_image_url)
-        
-        #버튼 및 view 추가
-        ##콜백
-        async def add_stream(interaction:ds.Interaction):
-            ###파일불러오기
-            with open('data\\twitch.json',"r") as file:
-                InformList = json.load(file)
-            ###파일에 스트리머 등록 여부
-            if str(StreamLogin) not in InformList:
-                InformList[str(StreamLogin)] = []
-            ###해당 채널 등록 여부
-            if interaction.channel.id not in InformList[str(StreamLogin)]:
-                InformList[str(StreamLogin)].append(interaction.channel.id)
-                embed = ds.Embed(color=0xffff00,title="이제부터 스트리머가 방송을 킬 때마다 아르가 여기에 알려줄게!")
+            if (StreamLogin in InformList) & (interaction.channel.id in InformList[StreamLogin]): 
+                #버튼 및 view 추가
+                ##알림 끄는 콜백
+                async def disable_stream_inform(interaction:ds.Interaction):
+                    ###파일 불러오기
+                    with open('data\\twitch.json') as file:
+                        InformList = json.load(file)
+                    ###파일에 스트리머 등록 여부
+                    if StreamLogin not in InformList:
+                        InformList[StreamLogin] = []
+                    ###해당 채널 등록 여부
+                    if interaction.channel.id in InformList[StreamLogin]:
+                        InformList[StreamLogin].remove(interaction.channel.id)
+                        embed = ds.Embed(color=0xffff00,title="이제부터 그만 알려줄게!")
+                        with open('data\\twitch.json',"w") as file:
+                            json.dump(InformList,file)
+                    else:
+                        embed = ds.Embed(color=0xffaa00,title="이미 이 스트리머는 그만 알리고 있어!")
+                    
+                    ###버튼 제거 및 임베드 보내기
+                    await interaction.message.edit(view=None)
+                    await interaction.response.send_message(embed=embed)
+                ###버튼 추가
+                button = Button(style=ds.ButtonStyle.primary,label="🔕")
+                button.callback = disable_stream_inform
             else:
-                embed = ds.Embed(color=0xffaa00,title="이미 아르는 여기에 알리고 있어!")
-            with open('data\\twitch.json',"w") as file:
-                json.dump(InformList,file)
-            await interaction.response.send_message(embed=embed)
-        button = Button(style=ds.ButtonStyle.primary,label="🔔")
-        button.callback = add_stream
-        view = View(timeout=15)    
-        view.add_item(button)
-
-        #embed 및 view 전송
-        await interaction.response.send_message(embed=embed,view=view)
+                ##알림 키는 콜백
+                async def enable_stream_inform(interaction:ds.Interaction):
+                    ###파일불러오기
+                    with open('data\\twitch.json',"r") as file:
+                        InformList = json.load(file)
+                    ###파일에 스트리머 등록 여부
+                    if StreamLogin not in InformList:
+                        InformList[StreamLogin] = []
+                    ###해당 채널 등록 여부
+                    if interaction.channel.id not in InformList[StreamLogin]:
+                        InformList[StreamLogin].append(interaction.channel.id)
+                        embed = ds.Embed(color=0xffff00,title="이제부터 스트리머가 방송을 킬 때마다 아르가 여기에 알려줄게!")
+                        
+                        with open('data\\twitch.json',"w") as file:
+                            json.dump(InformList,file)
+                    else:
+                        embed = ds.Embed(color=0xffaa00,title="이미 아르는 여기에 알리고 있어!")
+                    ###버튼 제거 및 embed 보내기
+                    await interaction.message.edit(view=None)
+                    await interaction.response.send_message(embed=embed)
+                ###버튼 추가
+                button = Button(style=ds.ButtonStyle.secondary,label="🔔")
+                button.callback = enable_stream_inform
+            #뷰 생성
+            view = View(timeout=15)    
+            view.add_item(button)
+            #임베드 및 뷰 전송
+            await interaction.response.send_message(embed=embed,view=view)
+            return
+        
+        #임베드 보내기
+        await interaction.response.send_message(embed=embed)
