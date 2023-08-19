@@ -33,10 +33,11 @@ async def on_ready():
 @bot.tree.command(name="싱크")
 async def sync_guild(interaction:ds.Interaction):
     try:
-        bot.tree.sync(guild=bot.get_guild(interaction.guild.id))
-        await interaction.response.send_message("싱크에 성공했어!")
+        await bot.tree.sync(guild=bot.get_guild(interaction.guild.id))
     except:
         await interaction.response.send_message("싱크에 실패했어.. TㅅT")
+    else:
+        await interaction.response.send_message("싱크에 성공했어!")
         
 
 #실행
