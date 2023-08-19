@@ -30,6 +30,15 @@ async def on_ready():
     #상태 변경
     await bot.change_presence(activity=ds.Activity(name='아르는 `~help`를',type=ds.ActivityType.listening))    
 
+@bot.tree.command(name="싱크")
+async def sync_guild(interaction:ds.Interaction):
+    try:
+        bot.tree.sync(guild=bot.get_guild(interaction.guild.id))
+        await interaction.response.send_message("싱크에 성공했어!")
+    except:
+        await interaction.response.send_message("싱크에 실패했어.. TㅅT")
+        
+
 #실행
 bot.run(TOKEN)
 
