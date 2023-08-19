@@ -5,6 +5,10 @@
 모든 코드는 오픈소스이며, 라이선스만 지킨다면 누구든 사용 가능합니다.
 
 ## 사용법
+### 세팅
+[파이썬(3.10.6)]을 설치합니다.
+
+### 프로그램 실행
 1.  소스코드 다운 후, `launch_set.py` 실행
 2.  각 api에 따라 발급 후 작성 ([api 리스트])
 3. `launch.py`를 실행
@@ -16,6 +20,7 @@
 - [X] [Twitch API]
 - [ ] Korean Dictionary API
 
-
+[파이썬(3.10.6)]: https://www.python.org/downloads/release/python-3106/
+[api 리스트]: https://github.com/Cl-Hanul/ARU/blob/main/README.md#%EC%82%AC%EC%9A%A9-api-%EB%A6%AC%EC%8A%A4%ED%8A%B8
 [Discord Bot API]: https://discord.com/developers/applications
 [Twitch API]: https://dev.twitch.tv/console/apps
