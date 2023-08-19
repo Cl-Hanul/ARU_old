@@ -24,3 +24,5 @@ try:
         dump(key,file,indent="\t")
 except:
     print("\n키 파일이 확인되었습니다.\n만일 키를 작성하지 않은 경우 'key.json'에서 작성해 주세요\n")
+    
+os.system("pause")

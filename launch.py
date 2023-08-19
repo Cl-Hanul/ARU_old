@@ -2,6 +2,7 @@
 import discord as ds
 from discord.ext import commands
 
+import os
 import json
 
 from cogs import append_cogs as ac
@@ -31,3 +32,5 @@ async def on_ready():
 
 #실행
 bot.run(TOKEN)
+
+os.system("pause")
