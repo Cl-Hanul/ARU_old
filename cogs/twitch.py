@@ -107,7 +107,7 @@ class Twitch(commands.Cog):
                     embed.description = userData.description
                     embed.set_thumbnail(url=userData.profile_image_url)
                     embed.set_image(url=userData.offline_image_url)
-            if (StreamLogin in InformList) & (interaction.channel.id in InformList[StreamLogin]): 
+            if (StreamLogin in InformList) and (interaction.channel.id in InformList[StreamLogin]): 
                 #버튼 및 view 추가
                 ##알림 끄는 콜백
                 async def disable_stream_inform(interaction:ds.Interaction):
