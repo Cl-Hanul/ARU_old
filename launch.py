@@ -1,6 +1,7 @@
 #import
 import discord as ds
-from discord.ext import commands
+from discord import app_commands
+from discord.ext import commands, tasks
 
 import os
 import json
@@ -9,12 +10,15 @@ from cogs import append_cogs as ac
 
 #토큰
 with open('key.json') as file:
-    TOKEN = json.load(file)["discord"]["bot"]["token"]
+    apiKeys = json.load(file)
+    TOKEN = apiKeys["discord"]["bot"]["token"]
+    app_id = apiKeys["discord"]["bot"]["appId"]
 
 #봇 추가
 command_prefix = "~"
 intents = ds.Intents.all()
 bot = commands.Bot(command_prefix=command_prefix,intents=intents)
+
 
 @bot.event
 async def on_ready():
@@ -25,10 +29,12 @@ async def on_ready():
     await ac.add_all(bot)
     
     #슬래시 커맨드 싱크
+    print('명령어를 싱크하는 중...')
     await bot.tree.sync()
+    print('완료!')
     
     #상태 변경
-    await bot.change_presence(activity=ds.Activity(name='아르는 `~help`를',type=ds.ActivityType.listening))    
+    await bot.change_presence(activity=ds.Activity(name='아르는 `~help`를',type=ds.ActivityType.listening))
 
 @bot.tree.command(name="싱크")
 async def sync_guild(interaction:ds.Interaction):
@@ -39,6 +45,9 @@ async def sync_guild(interaction:ds.Interaction):
     else:
         await interaction.response.send_message("싱크에 성공했어!")
         
+@bot.tree.command(name="프사")
+async def profileimage(interaction:ds.Interaction,member:ds.Member):
+    await interaction.response.send_message(member.avatar.with_size(512))
 
 #실행
 bot.run(TOKEN)
