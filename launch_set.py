@@ -15,11 +15,13 @@ try:
         key = {"discord":{},
                "naver":{},
                "korean":{},
-               "twitch":{}}
+               "twitch":{},
+               "neis":{}}
         key["discord"]["bot"] = {"token":""}
         key["naver"]["api"] = {"id":"","secret":""}
         key["korean"]["dictionary"] = {"key":""}
         key["twitch"]["api"] = {"id":"","secret":""}
+        key["neis"]["api"] = {"secret",""}
         
         dump(key,file,indent="\t")
 except:
