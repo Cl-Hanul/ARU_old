@@ -2,11 +2,9 @@ import requests
 from json import load
 from bs4 import BeautifulSoup
 
-client_secret = "5adfa0044fa54b08b79050ae6412c13c"
-
-# with open("API\\key.json","r",encoding="utf-8") as file:
-#     readFile = load(file)
-#     client_secret = readFile["neis"]["api"]["secret"]
+with open("API\\key.json","r",encoding="utf-8") as file:
+    readFile = load(file)
+    client_secret = readFile["neis"]["api"]["secret"]
 
 class dictData:
     class _Body:
