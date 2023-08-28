@@ -4,12 +4,14 @@ from discord.ext import commands
 from cogs.twitch import Twitch
 from cogs.item import Item
 from cogs.welcome import Welcome
+from cogs.neis import Neis
 
 async def add_all(bot:commands.Bot):
     cogs = [
         {"name":"twitch","cog":Twitch(bot)},
         {"name":"item","cog":Item(bot)},
-        {"name":"Welcome","cog":Welcome(bot)}
+        {"name":"Welcome","cog":Welcome(bot)},
+        {"name":"Neis","cog":Neis(bot)}
     ]
     
     for i in cogs:

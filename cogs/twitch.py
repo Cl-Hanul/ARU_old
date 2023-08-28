@@ -47,7 +47,13 @@ class Twitch(commands.Cog):
                 return
             if StreamData.stream:               
                 #임베드 생성 및 전송
-                for ChannelId in InfromList[StreamLogin]:
+                for ChannelId, RoleId in zip(InfromList[StreamLogin][0],InfromList[StreamLogin][1]):
+                    #트위치 알림 역할 추가
+                    Role = self.bot.get_channel(ChannelId).guild.get_role(RoleId)
+                    if not Role:
+                        Role = await self.bot.get_channel(ChannelId).guild.create_role(name="트위치 알림 리스너",color=0x6441a5)
+                        InfromList[StreamLogin] = [ChannelId,Role.id]
+                        
                     InformChannel = self.bot.get_channel(ChannelId)
                     
                     if ChannelId not in self.Informed[StreamLogin]:
@@ -60,7 +66,7 @@ class Twitch(commands.Cog):
                         embed.add_field(name=StreamData.title,value=StreamData.category)
                         embed.set_thumbnail(url=get_user(StreamData.user_login).profile_image_url)
                         embed.set_image(url=StreamData.thumbnail_url.format(width=1080,height=640))
-                        await InformChannel.send(embed=embed)
+                        await InformChannel.send(Role.mention,embed=embed)
                         
 
                     
@@ -69,6 +75,10 @@ class Twitch(commands.Cog):
     @app_commands.command(name="방송_정보",description="아르가 스트리머의 정보를 가져와줘!\n'streaminfo'")
     @app_commands.describe(streamlinkorlogin='스트리머의 방송 링크나 로그인을 입력해줘!')
     async def streaminfo(self,interaction:ds.Interaction,streamlinkorlogin:str):
+        try:
+            await interaction.guild.create_role(name="트위치 알림 리스너",color=0x6441a5,)
+        except Exception as e:
+            print(e)
         #스트리밍 로그인 가져오기
         StreamLogin = getStreamLogin(streamlinkorlogin)
         
@@ -83,6 +93,10 @@ class Twitch(commands.Cog):
             #파일 불러오기
             with open('data\\twitch.json') as file:
                 InformList = json.load(file)
+            #트위치 알림 역할 추가
+            Role = interaction.guild.get_role(0)
+            if not Role:
+                await interaction.guild.create_role(name="트위치 알림 리스너",color=0x6441a5)
             if StreamingData.stream == True:
                 #스트리머가 현재 스트리밍 중일 때
                 
@@ -107,7 +121,7 @@ class Twitch(commands.Cog):
                     embed.description = userData.description
                     embed.set_thumbnail(url=userData.profile_image_url)
                     embed.set_image(url=userData.offline_image_url)
-            if (StreamLogin in InformList) and (interaction.channel.id in InformList[StreamLogin]): 
+            if (StreamLogin in InformList) and (any(interaction.channel.id in s for s in InformList[StreamLogin])):
                 #버튼 및 view 추가
                 ##알림 끄는 콜백
                 async def disable_stream_inform(interaction:ds.Interaction):
@@ -118,13 +132,14 @@ class Twitch(commands.Cog):
                     if StreamLogin not in InformList:
                         InformList[StreamLogin] = []
                     ###해당 채널 등록 여부
-                    if interaction.channel.id in InformList[StreamLogin]:
-                        InformList[StreamLogin].remove(interaction.channel.id)
-                        embed = ds.Embed(color=0xffff00,title="이제부터 그만 알려줄게!")
-                        with open('data\\twitch.json',"w") as file:
-                            json.dump(InformList,file)
-                    else:
-                        embed = ds.Embed(color=0xffaa00,title="이미 이 스트리머는 그만 알리고 있어!")
+                    for iii in InformList[StreamLogin]:
+                        if interaction.channel.id == iii[0]:
+                            InformList[StreamLogin].remove(iii)
+                            embed = ds.Embed(color=0xffff00,title="이제부터 그만 알려줄게!")
+                            with open('data\\twitch.json',"w") as file:
+                                json.dump(InformList,file)
+                        else:
+                            embed = ds.Embed(color=0xffaa00,title="이미 이 스트리머는 그만 알리고 있어!")
                     
                     ###버튼 제거 및 임베드 보내기
                     await interaction.message.edit(view=None)
@@ -143,7 +158,7 @@ class Twitch(commands.Cog):
                         InformList[StreamLogin] = []
                     ###해당 채널 등록 여부
                     if interaction.channel.id not in InformList[StreamLogin]:
-                        InformList[StreamLogin].append(interaction.channel.id)
+                        InformList[StreamLogin].append([interaction.channel.id,Role.id])
                         embed = ds.Embed(color=0xffff00,title="이제부터 스트리머가 방송을 킬 때마다 아르가 여기에 알려줄게!")
                         
                         with open('data\\twitch.json',"w") as file:
