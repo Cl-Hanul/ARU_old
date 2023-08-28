@@ -12,7 +12,6 @@ from cogs import append_cogs as ac
 with open('key.json') as file:
     apiKeys = json.load(file)
     TOKEN = apiKeys["discord"]["bot"]["token"]
-    app_id = apiKeys["discord"]["bot"]["appId"]
 
 #봇 추가
 command_prefix = "~"
@@ -51,5 +50,3 @@ async def profileimage(interaction:ds.Interaction,member:ds.Member):
 
 #실행
 bot.run(TOKEN)
-
-os.system("pause")
