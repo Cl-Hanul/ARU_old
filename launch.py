@@ -22,7 +22,7 @@ bot = commands.Bot(command_prefix=command_prefix,intents=intents)
 @bot.event
 async def on_ready():
     #준비 완료 알림
-    print('your bot is ready!')
+    print(f'봇이 준비 되었습니다!\n이름: `{bot.user.name}`\n준비된 서버: `{len(bot.guilds)}개`\n')
     
     #cog 추가
     await ac.add_all(bot)
