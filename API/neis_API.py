@@ -2,9 +2,9 @@ import requests
 from json import load
 from bs4 import BeautifulSoup
 
-with open("API\\key.json","r",encoding="utf-8") as file:
+with open("key.json","r",encoding="utf-8") as file:
     readFile = load(file)
-    client_secret = readFile["neis"]["api"]["secret"]
+    client_secret = readFile["neis"]["api"]["key"]
 
 class dictData:
     class _Body:
@@ -36,7 +36,7 @@ def get_school_by_name(school_name):
     except KeyError:
         return None
     else:
-        return [{"ofcdc_code":resschool["ATPT_OFCDC_SC_CODE"],"code":resschool["SD_SCHUL_CODE"],"name":resschool["SCHUL_NM"],"pos":f"{resschool['ORG_RDNMA']} ({resschool['ORG_RDNZC']})"} for resschool in resjson['schoolInfo'][1]['row']]
+        return [{"ofcdc_code":resschool["ATPT_OFCDC_SC_CODE"],"code":resschool["SD_SCHUL_CODE"],"name":resschool["SCHUL_NM"],"pos":f"{resschool['ORG_RDNMA']} ({resschool['ORG_RDNZC']})","code_all":f'{resschool["ATPT_OFCDC_SC_CODE"]}{resschool["SD_SCHUL_CODE"]}'} for resschool in resjson['schoolInfo'][1]['row']]
 
 def get_meal(ofcdc_code,school_code,date):
     params = {

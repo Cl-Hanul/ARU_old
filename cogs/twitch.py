@@ -36,7 +36,7 @@ class Twitch(commands.Cog):
             InfromList = json.load(file)
         #스트리머 만큼 반복
         for StreamLogin in InfromList.keys():
-            #스트리머가 이미 알림 변수에 없을 때
+            #스트리머가 알림 변수에 없을 때
             if StreamLogin not in self.Informed:
                 self.Informed[StreamLogin] = []
             

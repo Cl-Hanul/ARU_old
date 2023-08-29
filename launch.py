@@ -38,11 +38,11 @@ async def on_ready():
 @bot.tree.command(name="싱크")
 async def sync_guild(interaction:ds.Interaction):
     try:
-        await bot.tree.sync(guild=bot.get_guild(interaction.guild.id))
+        syncs = await bot.tree.sync(guild=bot.get_guild(interaction.guild.id))
     except:
         await interaction.response.send_message("싱크에 실패했어.. TㅅT")
     else:
-        await interaction.response.send_message("싱크에 성공했어!")
+        await interaction.response.send_message("싱크에 성공했어! 싱크된 명령어 : `{commands}개`".format(commands=len(syncs)))
         
 @bot.tree.command(name="프사")
 async def profileimage(interaction:ds.Interaction,member:ds.Member):
