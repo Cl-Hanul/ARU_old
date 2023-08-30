@@ -26,6 +26,29 @@
 - [ ] Korean Dictionary API
 - [ ] [Neis API]
 
+## 기능
+
+### 기본
+
+| 명령어 | 설명 |
+|-|-|
+| `/핑` | 아르와 통신하는 속도를 알려줍니다 |
+| `/싱크` | 아르가 사용할 수 있는 커맨드를 불러옵니다 |
+
+### 트위치
+
+### 나이스
+
+### 아이템
+
+### 뭐시기
+
+### 유저 알림
+
+### 봇 설정
+
+
+
 [파이썬(3.10.6)]: https://www.python.org/downloads/release/python-3106/
 [api 리스트]: https://github.com/Cl-Hanul/ARU/blob/main/README.md#%EC%82%AC%EC%9A%A9-api-%EB%A6%AC%EC%8A%A4%ED%8A%B8
 [Discord Bot API]: https://discord.com/developers/applications
