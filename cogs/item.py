@@ -4,6 +4,40 @@ from discord.ext import commands
 from discord.ui import Select, View, Button, ChannelSelect
 
 import json
+from random import randint
+
+def per(percentage:float):
+    if randint(0,10000) <= percentage*100:
+        return True
+    else:
+        return False
+
+def upgradelvl(lvl) -> int | float:
+    if per(0.01):
+        return None
+    if lvl > 200:
+        if per(15):
+            return lvl+randint(5,10)
+    elif lvl > 100:
+        if per(30):
+            return lvl+randint(5,10)
+    elif lvl > 80:
+        if per(55):
+            return lvl+randint(5,10)
+    elif lvl > 50:
+        if per(70):
+            return lvl+randint(5,10)
+    elif lvl > 30:
+        if per(80):
+            return lvl+randint(5,10)
+    elif lvl > 10:
+        if per(90):
+            return lvl+randint(5,10)
+    else:
+        return lvl+randint(5,10)
+    return lvl*(randint(50,100)/100)
+    
+        
 
 class ItemCog(commands.Cog):
     item = app_commands.Group(name="아이템", description="아이템 설명")
@@ -46,14 +80,37 @@ class ItemCog(commands.Cog):
     async def iteminfo(self, interaction:ds.Interaction):
         with open('data\\item.json', encoding="UTF8") as file:
             items = json.load(file)
-
+        
         async def callbacky(interaction:ds.Interaction):
             embed = ds.Embed(title=f'{eval(itemselect.values[0])["name"]} Lv.{eval(itemselect.values[0])["lvl"]}',description=eval(itemselect.values[0])["description"])
             viewe = View()
             upgrade = Button(style=ds.ButtonStyle.green,label="⬆️강화")
+            async def itemupgrade(interaction:ds.Interaction):
+                with open('data\\item.json',encoding="UTF8") as file:
+                    myitems = json.load(file)
+                itempos = next((index for (index, item) in enumerate(myitems[str(interaction.user.id)]) if item["name"] == eval(itemselect.values[0])["name"]),None)
+                before = myitems[str(interaction.user.id)][itempos]["lvl"]
+                myitems[str(interaction.user.id)][itempos]["lvl"] = int(upgradelvl(myitems[str(interaction.user.id)][itempos]["lvl"]))
+                if myitems[str(interaction.user.id)][itempos]["lvl"] == None:
+                    content = f"터졌습니다 | 최고 기록:{before}"
+                    embed = ds.Embed(color=0xff0000)
+                elif myitems[str(interaction.user.id)][itempos]["lvl"] < before:
+                    content = f"{before} -> {myitems[str(interaction.user.id)][itempos]['lvl']}"
+                    embed = ds.Embed(color=0xffaa00)
+                else:
+                    content = f"{before} -> {myitems[str(interaction.user.id)][itempos]['lvl']}"
+                    embed = ds.Embed(color=0x00ff00)
+                with open('data\\item.json',"w") as file:
+                    json.dump(myitems,file)
+                
+                embed.title = f'{myitems[str(interaction.user.id)][itempos]["name"]} Lv.{myitems[str(interaction.user.id)][itempos]["lvl"]}'
+                embed.description = myitems[str(interaction.user.id)][itempos]['description']
+                await interaction.response.edit_message(content=content,embed=embed)
+                
+            upgrade.callback = itemupgrade
             viewe.add_item(upgrade)
             viewe.add_item(itemselect)
-            await interaction.response.edit_message(embed=embed,view=viewe)
+            await interaction.response.edit_message(content="",embed=embed,view=viewe)
         async def callbackn(interaction:ds.Interaction):
             await interaction.message.delete()
         
