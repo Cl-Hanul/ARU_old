@@ -33,7 +33,7 @@ async def on_ready():
     print('완료!')
     
     #상태 변경
-    await bot.change_presence(activity=ds.Activity(name='아르는 `~help`를',type=ds.ActivityType.listening))
+    await bot.change_presence(activity=ds.Activity(name='=͟͟͞͞ ͟͟͞͞𖤐 아르는 `~help`를',type=ds.ActivityType.listening))
 
 @bot.tree.command(name="싱크")
 async def sync_guild(interaction:ds.Interaction):
