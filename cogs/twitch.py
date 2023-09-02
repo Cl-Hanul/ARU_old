@@ -93,10 +93,6 @@ class Twitch(commands.Cog):
             #파일 불러오기
             with open('data\\twitch.json') as file:
                 InformList = json.load(file)
-            #트위치 알림 역할 추가
-            Role = interaction.guild.get_role(0)
-            if not Role:
-                await interaction.guild.create_role(name="트위치 알림 리스너",color=0x6441a5)
             if StreamingData.stream == True:
                 #스트리머가 현재 스트리밍 중일 때
                 
@@ -158,7 +154,7 @@ class Twitch(commands.Cog):
                         InformList[StreamLogin] = []
                     ###해당 채널 등록 여부
                     if interaction.channel.id not in InformList[StreamLogin]:
-                        InformList[StreamLogin].append([interaction.channel.id,Role.id])
+                        InformList[StreamLogin].append([interaction.channel.id])
                         embed = ds.Embed(color=0xffff00,title="이제부터 스트리머가 방송을 킬 때마다 아르가 여기에 알려줄게!")
                         
                         with open('data\\twitch.json',"w") as file:
