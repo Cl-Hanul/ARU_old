@@ -35,7 +35,7 @@ def upgradelvl(lvl) -> int | float:
             return int(lvl+randint(5,10))
     else:
         return int(lvl+randint(5,10))
-    return lvl*(randint(50,100)/100)
+    return int(lvl*(randint(50,100)/100))
     
         
 
