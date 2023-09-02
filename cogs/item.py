@@ -17,24 +17,24 @@ def upgradelvl(lvl) -> int | float:
         return None
     if lvl > 200:
         if per(15):
-            return lvl+randint(5,10)
+            return int(lvl+randint(5,10))
     elif lvl > 100:
         if per(30):
-            return lvl+randint(5,10)
+            return int(lvl+randint(5,10))
     elif lvl > 80:
         if per(55):
-            return lvl+randint(5,10)
+            return int(lvl+randint(5,10))
     elif lvl > 50:
         if per(70):
-            return lvl+randint(5,10)
+            return int(lvl+randint(5,10))
     elif lvl > 30:
         if per(80):
-            return lvl+randint(5,10)
+            return int(lvl+randint(5,10))
     elif lvl > 10:
         if per(90):
-            return lvl+randint(5,10)
+            return int(lvl+randint(5,10))
     else:
-        return lvl+randint(5,10)
+        return int(lvl+randint(5,10))
     return lvl*(randint(50,100)/100)
     
         
@@ -88,27 +88,48 @@ class ItemCog(commands.Cog):
             async def itemupgrade(interaction:ds.Interaction):
                 with open('data\\item.json',encoding="UTF8") as file:
                     myitems = json.load(file)
+                viewe = View()
                 itempos = next((index for (index, item) in enumerate(myitems[str(interaction.user.id)]) if item["name"] == eval(itemselect.values[0])["name"]),None)
+                if itempos == None:
+                    await interaction.message.delete()
+                    return
                 before = myitems[str(interaction.user.id)][itempos]["lvl"]
-                myitems[str(interaction.user.id)][itempos]["lvl"] = int(upgradelvl(myitems[str(interaction.user.id)][itempos]["lvl"]))
+                myitems[str(interaction.user.id)][itempos]["lvl"] = upgradelvl(myitems[str(interaction.user.id)][itempos]["lvl"])
                 if myitems[str(interaction.user.id)][itempos]["lvl"] == None:
                     content = f"터졌습니다 | 최고 기록:{before}"
                     embed = ds.Embed(color=0xff0000)
                 elif myitems[str(interaction.user.id)][itempos]["lvl"] < before:
                     content = f"{before} -> {myitems[str(interaction.user.id)][itempos]['lvl']}"
                     embed = ds.Embed(color=0xffaa00)
+                    viewe.add_item(upgrade)
                 else:
                     content = f"{before} -> {myitems[str(interaction.user.id)][itempos]['lvl']}"
                     embed = ds.Embed(color=0x00ff00)
-                with open('data\\item.json',"w") as file:
-                    json.dump(myitems,file)
+                    viewe.add_item(upgrade)
                 
                 embed.title = f'{myitems[str(interaction.user.id)][itempos]["name"]} Lv.{myitems[str(interaction.user.id)][itempos]["lvl"]}'
                 embed.description = myitems[str(interaction.user.id)][itempos]['description']
-                await interaction.response.edit_message(content=content,embed=embed)
                 
+                if myitems[str(interaction.user.id)][itempos]["lvl"] == None:
+                    del myitems[str(interaction.user.id)][itempos]
+                with open('data\\item.json',"w") as file:
+                    json.dump(myitems,file)
+                    
+                if str(interaction.user.id) not in items:
+                    itemselect.options=[ds.SelectOption(label="현재 아무 아이템도 소지하고 있지 않아!",value="no",description="`/아이템 제작`로 아이템을 만들어줘!")]
+                else:
+                    itemselect.options=[ds.SelectOption(label=item["name"],value=str(item),description=item["lvl"]) for item in myitems[str(interaction.user.id)]]
+                viewe.add_item(itemselect)
+                await interaction.response.edit_message(content=content,embed=embed,view=viewe)
+            
             upgrade.callback = itemupgrade
             viewe.add_item(upgrade)
+            with open('data\\item.json', encoding="UTF8") as file:
+                items = json.load(file)
+            if str(interaction.user.id) not in items:
+                itemselect.options = [ds.SelectOption(label="현재 아무 아이템도 소지하고 있지 않아!",value="no",description="`/아이템 제작`로 아이템을 만들어줘!")]
+            else:
+                itemselect.options = [ds.SelectOption(label=item["name"],value=str(item),description=item["lvl"]) for item in items[str(interaction.user.id)]]
             viewe.add_item(itemselect)
             await interaction.response.edit_message(content="",embed=embed,view=viewe)
         async def callbackn(interaction:ds.Interaction):
