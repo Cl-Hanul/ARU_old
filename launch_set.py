@@ -8,6 +8,15 @@ from json import dump
 # 모듈 설치
 os.system('pip install -r requirements.txt')
 
+#데이터 베이스 추가
+for filedata in [["item","{}"],['neis','{"meal":{},"school":{}}'],['twitch',"{}"],['visit',"{}"]]:
+    try:
+        with open("data\\"+filedata[0]+".json","x",encoding="UTF8") as file:
+            file.write(filedata[1])
+    except FileExistsError:
+        print(f"{filedata[0]}.json 확인 됨. 변경 취소")
+
+print("\n")
 # 키 파일 추가
 print(os.path.abspath('key.json'))
 try:
@@ -26,5 +35,5 @@ try:
         dump(key,file,indent="\t")
 except:
     print("\n키 파일이 확인되었습니다.\n만일 키를 작성하지 않은 경우 'key.json'에서 작성해 주세요\n")
-    
+
 os.system("pause")
