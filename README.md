@@ -101,6 +101,7 @@
 
 ### 기타
 현재 버전 : v0.3a
+# !!이제 임베드 통합만 남았다!!
 
 
 [파이썬(3.10.6)]: https://www.python.org/downloads/release/python-3106/
