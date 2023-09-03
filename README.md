@@ -107,6 +107,17 @@
 
 ### 기타
 현재 버전 : v0.3a
+> 색깔
+> - 퍼스널 컬러 ![#ffd8ee](https://placehold.co/15x15/ffd8ee/ffd8ee.png)`#ffd8ee`
+> - 퍼스널 컬러 ![#ffa4c6](https://placehold.co/15x15/ffa4c6/ffa4c6.png)`#ffa4c6`
+
+> 임베드
+> - 빨강 ![#ee6666](https://placehold.co/15x15/ee6666/ee6666.png)`#ee6666`
+> - 파랑 ![#6666ff](https://placehold.co/15x15/6666ff/6666ff.png)`#6666ff`
+> - 노랑 ![#ffff66](https://placehold.co/15x15/ffff66/ffff66.png)`#ffff66`
+> - 초록 ![#66ff66](https://placehold.co/15x15/66ff66/66ff66.png)`#66ff66`
+> - 주황 ![#ffaa66](https://placehold.co/15x15/ffaa66/ffaa66.png)`#ffaa66`
+
 # !!이제 임베드 통합만 남았다!!
 
 
