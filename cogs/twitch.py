@@ -75,10 +75,6 @@ class Twitch(commands.Cog):
     @app_commands.command(name="방송_정보",description="아르가 스트리머의 정보를 가져와줘!\n'streaminfo'")
     @app_commands.describe(streamlinkorlogin='스트리머의 방송 링크나 로그인을 입력해줘!')
     async def streaminfo(self,interaction:ds.Interaction,streamlinkorlogin:str):
-        try:
-            await interaction.guild.create_role(name="트위치 알림 리스너",color=0x6441a5,)
-        except Exception as e:
-            print(e)
         #스트리밍 로그인 가져오기
         StreamLogin = getStreamLogin(streamlinkorlogin)
         
