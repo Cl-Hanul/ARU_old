@@ -66,6 +66,10 @@ class ItemCog(commands.Cog):
         if str(interaction.user.id) not in items:
             items[str(interaction.user.id)] = []
         
+        if next((item for item in items[str(interaction.user.id)] if item['name'] == itemname),None):
+            await interaction.response.send_message("이미 존재하는 이름의 아이템은 제작할 수 없습니다")
+            return
+        
         items[str(interaction.user.id)].append(
             {"name":itemname,
             "lvl":1,

@@ -37,7 +37,7 @@ class Welcome(commands.Cog):
         with BytesIO() as imageFile:
             welcomeImage.save(imageFile,'PNG')
             imageFile.seek(0)
-            await self.bot.get_channel(visitData[str(member.guild.id)]["in"]).send(member.mention + "짱!\n한울 서버에 온걸 환영해! ><",file=ds.File(imageFile,f"{nick}-welcome.png"))
+            await self.bot.get_channel(visitData[str(member.guild.id)]["in"]).send(member.mention + "짱!\n한울 서버에 온걸 환영해! ><",file=ds.File(imageFile,f"aru-{nick}-welcome.png"))
 
     @commands.Cog.listener()
     async def on_member_remove(self,member:ds.Member):
