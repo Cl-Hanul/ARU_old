@@ -4,6 +4,10 @@ from discord.ext import commands
 from discord.ui import Select, View, Button
 
 import json
+from io import BytesIO
+from PIL import Image
+
+from image_assets.welcome import getwelcome
 
 class Welcome(commands.Cog):
     Visit = app_commands.Group(name="방문알림",description="방문알림과 관련된 명령어")
@@ -13,15 +17,28 @@ class Welcome(commands.Cog):
     
     @commands.Cog.listener()
     async def on_member_join(self,member:ds.Member):
+        profileImage = Image.open(BytesIO(await member.avatar.read()))
+        serverName = member.guild.name
+        if member.nick:
+            nick = member.nick
+        elif member.name:
+            nick = member.name
+        else:
+            nick = member.global_name
+        welcomeImage = getwelcome(profileImage,serverName,nick)
+        
         with open("data\\visit.json") as file:
             visitData = json.load(file)
-        
         if str(member.guild.id) not in visitData:
             return
         if self.bot.get_channel(visitData[str(member.guild.id)]["in"]) == None:
             return
-        await self.bot.get_channel(visitData[str(member.guild.id)]["in"]).send(member.mention + "짱!\n한울 서버에 온걸 환영해! ><")
-    
+        
+        with BytesIO() as imageFile:
+            welcomeImage.save(imageFile,'PNG')
+            imageFile.seek(0)
+            await self.bot.get_channel(visitData[str(member.guild.id)]["in"]).send(member.mention + "짱!\n한울 서버에 온걸 환영해! ><",file=ds.File(imageFile,f"{nick}-welcome.png"))
+
     @commands.Cog.listener()
     async def on_member_remove(self,member:ds.Member):
         with open("data\\visit.json") as file:
