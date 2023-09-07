@@ -43,10 +43,6 @@ async def sync_guild(interaction:ds.Interaction):
         await interaction.response.send_message("싱크에 실패했어.. TㅅT")
     else:
         await interaction.response.send_message("싱크에 성공했어! 싱크된 명령어 : `{commands}개`".format(commands=len(syncs)))
-        
-@bot.tree.command(name="프사")
-async def profileimage(interaction:ds.Interaction,member:ds.Member):
-    await interaction.response.send_message(member.avatar.with_size(512))
 
 #실행
 bot.run(TOKEN)
