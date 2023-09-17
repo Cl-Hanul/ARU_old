@@ -128,8 +128,6 @@
 > - 신
 > - 아르
 
-# !!이제 임베드 통합만 남았다!!
-
 
 [파이썬(3.10.6)]: https://www.python.org/downloads/release/python-3106/
 [api 리스트]: https://github.com/Cl-Hanul/ARU/blob/main/README.md#%EC%82%AC%EC%9A%A9-api-%EB%A6%AC%EC%8A%A4%ED%8A%B8
