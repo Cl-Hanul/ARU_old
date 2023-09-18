@@ -60,7 +60,7 @@ def get_meal(ofcdc_code,school_code,date):
         resdish:list = resjson['mealServiceDietInfo'][1]['row']
         return dictData(reshead[1]["RESULT"]["CODE"],[dictData._Body(dish['SCHUL_NM'], dish['MMEAL_SC_NM'], dish['MLSV_YMD'], dish['DDISH_NM'].replace("<br/>","\n"), dish['CAL_INFO'], dish['NTR_INFO'].split("<br/>")) for dish in resdish],reshead[0]['list_total_count'])
 
-# print(get_school_by_name("울릉"))
+# print(get_school_by_name(""))
 
 # res = get_meal("R10","8981025",20230829)
 # if res.resCode == "INFO-000":

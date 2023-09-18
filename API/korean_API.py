@@ -3,7 +3,7 @@ from urllib3.exceptions import InsecureRequestWarning
 req.packages.urllib3.disable_warnings(InsecureRequestWarning)
 from json import load
 
-#https://opendict.korean.go.kr/api/search?certkey_no=5757&key=F971060EE4F308FBB276A31AE0DA685A&target_type=search&req_type=json&part=word&q=%EB%AF%88%E3%85%85%EC%85%95&sort=dict&start=1&num=10
+#https://opendict.korean.go.kr/api/search?certkey_no=5757&key={{KEY}}&target_type=search&req_type=json&part=word&q={{query}}&sort=dict&start=1&num=10
 
 with open("V2\\API\\key.json","r",encoding="utf-8") as file:
     readFile = load(file)
