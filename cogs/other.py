@@ -43,7 +43,7 @@ class Other(commands.Cog):
     
     @app_commands.command(name="수면시간", description="아르가 재워줄게..")
     @app_commands.choices(waketimehour=[app_commands.Choice(name=hour,value=hour) for hour in range(1,25)])
-    @app_commands.choices(waketimeminute=[app_commands.Choice(name=minute,value=minute) for minute in range(0,60,5)])
+    @app_commands.choices(waketimeminute=[app_commands.Choice(name=minute,value=minute) for minute in range(0,60)])
     async def sleeptime(self, interaction:ds.Interaction, waketimehour:app_commands.Choice[int],waketimeminute:app_commands.Choice[int]):
         waketime = waketimehour.value*60 + waketimeminute.value
         sleeptime = [
@@ -56,10 +56,10 @@ class Other(commands.Cog):
         minute2time = lambda minute: f"{one2two(minute//60)}:{one2two(minute%60)}" if minute >= 0 else f"{one2two((1440+minute)//60)}:{one2two((1440+minute)%60)}"
         
         embed = ds.Embed(color=0xffd8ee,title=f"🌙 `{minute2time(waketime)}`에 일어날 `수면 시간` 추천!",description='-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-')
-        embed.add_field(name="4시간 30분 수면",value=f"> ```{minute2time(sleeptime[3])}```\n")
-        embed.add_field(name="6시간 00분 수면",value=f"> ```{minute2time(sleeptime[2])}```\n")
+        embed.add_field(name="4시간 30분 수면",value=f"> ```{minute2time(sleeptime[0])}```\n")
+        embed.add_field(name="6시간 00분 수면",value=f"> ```{minute2time(sleeptime[1])}```\n")
         embed.add_field(name="",value="")
-        embed.add_field(name="7시간 30분 수면",value=f"> ```{minute2time(sleeptime[1])}```\n")
-        embed.add_field(name="9시간 00분 수면",value=f"> ```{minute2time(sleeptime[0])}```\n")
+        embed.add_field(name="7시간 30분 수면",value=f"> ```{minute2time(sleeptime[2])}```\n")
+        embed.add_field(name="9시간 00분 수면",value=f"> ```{minute2time(sleeptime[3])}```\n")
         embed.add_field(name="",value="")
         await interaction.response.send_message(embed=embed)
