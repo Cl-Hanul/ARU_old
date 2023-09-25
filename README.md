@@ -22,6 +22,7 @@
 - [ ] Korean Dictionary API
 - [x] [Neis API]
 - [ ] [기상청 API]
+- [ ] [국가 법률 API]
 
 ## 기능
 아르 봇의 기능
@@ -131,6 +132,8 @@
 > - 신
 > - 아르
 
+## 매우 기타 등등
+[개인정보 이용 방침](https://github.com/Cl-Hanul/ARU/blob/main/DOCS/privacy.md)
 
 [파이썬(3.10.6)]: https://www.python.org/downloads/release/python-3106/
 [api 리스트]: https://github.com/Cl-Hanul/ARU/blob/main/README.md#%EC%82%AC%EC%9A%A9-api-%EB%A6%AC%EC%8A%A4%ED%8A%B8
@@ -139,3 +142,4 @@
 [Neis API]: https://open.neis.go.kr/portal/myPage/actKeyPage.do
 [기상청 API]: https://apihub.kma.go.kr
 [봇 초대 링크]: https://discord.com/api/oauth2/authorize?client_id=1067254933553958953&permissions=8&scope=bot
+[국가 법률 API]: https://open.law.go.kr/LSO/openApi/guideList.do
