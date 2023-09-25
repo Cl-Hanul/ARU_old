@@ -66,7 +66,11 @@ class Twitch(commands.Cog):
                         embed.add_field(name=StreamData.title,value=StreamData.category)
                         embed.set_thumbnail(url=get_user(StreamData.user_login).profile_image_url)
                         embed.set_image(url=StreamData.thumbnail_url.format(width=1080,height=640))
-                        await InformChannel.send(embed=embed) #Role.mention
+                        try:
+                            await InformChannel.send(embed=embed) #Role.mention
+                        except AttributeError:
+                            print(f'채널({ChannelId})(이)가 존재하지 않습니다.')
+                            continue
                         
 
                     
