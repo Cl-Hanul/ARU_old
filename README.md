@@ -15,7 +15,7 @@
 
 ## 사용 API 리스트
 (체크 == 아르 봇 적용 여부)
-
+<!-- 이거 국가 데이터는 data.go.kr로 옮겨야 될듯 -->
 - [X] [Discord Bot API]
 - [ ] naver API
 - [X] [Twitch API]
