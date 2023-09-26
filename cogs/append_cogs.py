@@ -7,6 +7,7 @@ from cogs.welcome import Welcome
 from cogs.neis import Neis
 from cogs.other import Other
 from cogs.custom_embed import CustomEmbed
+from cogs.weather import Weather
 
 async def add_all(bot:commands.Bot):
     cogs = [
@@ -15,7 +16,8 @@ async def add_all(bot:commands.Bot):
         {"name":"Welcome","cog":Welcome(bot)},
         {"name":"Neis","cog":Neis(bot)},
         {"name":"Other","cog":Other(bot)},
-        {"name":"CustomEmbed","cog":CustomEmbed(bot)}
+        {"name":"CustomEmbed","cog":CustomEmbed(bot)},
+        {"name":"Weather","cog":Weather(bot)}
     ]
     
     for i in cogs:

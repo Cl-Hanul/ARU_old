@@ -43,7 +43,7 @@ class Other(commands.Cog):
     
     @app_commands.command(name="수면시간", description="아르가 재워줄게..")
     @app_commands.choices(waketimehour=[app_commands.Choice(name=hour,value=hour) for hour in range(1,25)])
-    @app_commands.choices(waketimeminute=[app_commands.Choice(name=minute,value=minute) for minute in range(0,60)])
+    @app_commands.choices(waketimeminute=[app_commands.Choice(name=minute,value=minute) for minute in range(0,60,5)])
     async def sleeptime(self, interaction:ds.Interaction, waketimehour:app_commands.Choice[int],waketimeminute:app_commands.Choice[int]):
         waketime = waketimehour.value*60 + waketimeminute.value
         sleeptime = [
