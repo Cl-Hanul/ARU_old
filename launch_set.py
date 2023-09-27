@@ -25,12 +25,15 @@ try:
                "naver":{},
                "korean":{},
                "twitch":{},
-               "neis":{}}
+               "neis":{},
+               "weather":{}
+        }
         key["discord"]["bot"] = {"token":""}
         key["naver"]["api"] = {"id":"","secret":""}
         key["korean"]["dictionary"] = {"key":""}
         key["twitch"]["api"] = {"id":"","secret":""}
-        key["neis"]["api"] = {"secret",""}
+        key["neis"]["api"] = {"secret":""}
+        key['weather']['cho-dan-gi'] = {"key":""}
         
         dump(key,file,indent="\t")
 except:

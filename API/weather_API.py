@@ -4,7 +4,7 @@ from json import load
 
 with open("key.json","r",encoding="utf-8") as file:
     readFile = load(file)
-    client_key = readFile["gi-sang"]["dan-gi"]["key"]
+    client_key = readFile["weather"]["cho-dan-gi"]["key"]
 
 class dictData:
     class _Body:
