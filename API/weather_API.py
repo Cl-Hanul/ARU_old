@@ -2,7 +2,7 @@ import requests as req
 from datetime import datetime
 from json import load
 
-with open("V2\\API\\key.json","r",encoding="utf-8") as file:
+with open("key.json","r",encoding="utf-8") as file:
     readFile = load(file)
     client_key = readFile["gi-sang"]["dan-gi"]["key"]
 
@@ -19,7 +19,7 @@ class dictData:
 
 def getWeather(datetime:str,x,y) -> dict:
     url = 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst'
-    params ={'serviceKey' : client_key, 'pageNo' : '1', 'numOfRows' : '1000', 'dataType' : 'JSON', 'base_date' : f'{datetime}', 'base_time' : '0600', 'nx' : f"{x}", 'ny' : f"{y}" }
+    params ={'serviceKey' : client_key, 'pageNo' : '1', 'numOfRows' : '1000', 'dataType' : 'JSON', 'base_date' : f'{datetime}', 'base_time' : '0000', 'nx' : f"{x}", 'ny' : f"{y}" }
 
     response = req.get(url, params=params)
     return response.content

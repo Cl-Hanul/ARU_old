@@ -4,11 +4,25 @@ from discord.ext import commands
 from discord.ui import View, Select, Button
 
 import json
+from datetime import datetime
+
+from API.weather_API import getWeather
 
 class Weather(commands.Cog):
     def __init__(self,bot:commands.Bot) -> None:
         self.bot = bot
-        
+    
+    @app_commands.command(name="오늘날씨",description="아르가 날씨를 알려줘!")
+    async def todayweather(self, interaction:ds.Interaction):
+        with open("data\\weather.json","r",encoding="UTF-8") as file:
+            weatherdata = json.load(file)
+        if str(interaction.user.id) not in weatherdata['positions']:
+            await interaction.response.send_message("아직은 너가 어디 사는지 아르는 몰라!\n'`/위치설정`' 명령어를 먼저 써줘!")
+            return
+        coords = [weatherdata['positions'][str(interaction.user.id)]['coord']['x'],weatherdata['positions'][str(interaction.user.id)]['coord']['y']]
+        today_weather_data = getWeather(datetime.strftime(datetime.now(),"%Y%m%d"),coords[0],coords[1])
+        await interaction.response.send_message(today_weather_data)
+    
     @app_commands.command(name="위치설정",description="아르가 날씨를 알려줄 때 참고할 정보")
     @app_commands.describe(rlg="광역자치단체(Regional Local Government)")
     @app_commands.choices(rlg=[app_commands.Choice(name=pos,value=pos) for pos in ["서울특별시","부산광역시","대구광역시","인천광역시","광주광역시","대전광역시","울산광역시","세종특별자치시","경기도","충청북도","충청남도","전라북도","전라남도","경상북도","경상남도","제주특별자치도","이어도","강원특별자치도"]])
