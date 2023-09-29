@@ -7,7 +7,7 @@ import json
 from io import BytesIO
 from PIL import Image
 
-from image_assets.welcome import getwelcome
+from image_assets.welcome.welcome import getwelcome
 
 class Welcome(commands.Cog):
     Visit = app_commands.Group(name="방문알림",description="방문알림과 관련된 명령어")

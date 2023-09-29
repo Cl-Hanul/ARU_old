@@ -6,13 +6,13 @@ basesize = (256,384)
 font = ImageFont.truetype("font/학교안심 가을소풍B.ttf",90)
 tempfont = ImageFont.truetype("font/학교안심 가을소풍B.ttf",70)
 
-Cloudy = Image.open(r"image_assets\weather\Cloudy.png")
-Hazy = Image.open(r"image_assets\weather\Hazy.png")
-Rain = Image.open(r"image_assets\weather\Rain.png")
-RainSnow = Image.open(r"image_assets\weather\RainSnow.png")
-Snow = Image.open(r"image_assets\weather\Snow.png")
-Sonagi = Image.open(r"image_assets\weather\Sonagi.png")
-Sunny = Image.open(r"image_assets\weather\Sunny.png")
+Cloudy = Image.open(r"image_assets\weather\Cloudy.png").resize((224,224),Image.Resampling(2))
+Hazy = Image.open(r"image_assets\weather\Hazy.png").resize((224,224),Image.Resampling(2))
+Rain = Image.open(r"image_assets\weather\Rain.png").resize((224,224),Image.Resampling(2))
+RainSnow = Image.open(r"image_assets\weather\RainSnow.png").resize((224,224),Image.Resampling(2))
+Snow = Image.open(r"image_assets\weather\Snow.png").resize((224,224),Image.Resampling(2))
+Sonagi = Image.open(r"image_assets\weather\Sonagi.png").resize((224,224),Image.Resampling(2))
+Sunny = Image.open(r"image_assets\weather\Sunny.png").resize((224,224),Image.Resampling(2))
 
 def getweatherimage(weatherlist:list) -> Image.Image:
     row = 13
@@ -28,7 +28,7 @@ def getweatherimage(weatherlist:list) -> Image.Image:
         bgdraw.text(startPos(128,60),f"{weatherTime}",font=font,anchor="ms")
         bgdraw.text(startPos(128,370),f"{weatherlist[i]['TMP']}˚C",font=tempfont,anchor="ms")
 
-        iconPos = startPos(0,50)
+        iconPos = startPos(15,75)
         if (weatherlist[i]['PTY'] == '1') or (weatherlist[i]['PTY'] == '4'):
             bg.paste(Rain,iconPos,mask=Rain)
             continue
