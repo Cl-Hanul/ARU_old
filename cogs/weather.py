@@ -5,8 +5,10 @@ from discord.ui import View, Select, Button
 
 import json
 from datetime import datetime
+from io import BytesIO
 
 from API.weather_API import getWeather
+from image_assets.weather.weather import getweatherimage
 
 class Weather(commands.Cog):
     def __init__(self,bot:commands.Bot) -> None:
@@ -20,8 +22,11 @@ class Weather(commands.Cog):
             await interaction.response.send_message("아직은 너가 어디 사는지 아르는 몰라!\n'`/위치설정`' 명령어를 먼저 써줘!")
             return
         coords = [weatherdata['positions'][str(interaction.user.id)]['coord']['x'],weatherdata['positions'][str(interaction.user.id)]['coord']['y']]
-        today_weather_data = getWeather(datetime.strftime(datetime.now(),"%Y%m%d"),coords[0],coords[1])
-        await interaction.response.send_message(today_weather_data)
+        today_weather_data = getWeather(datetime.now(),coords[0],coords[1])
+        with BytesIO() as image:
+            getweatherimage(today_weather_data.items).save(image,"PNG")
+            image.seek(0)
+            await interaction.response.send_message(file=ds.File(image,"today_weather.png"))
     
     @app_commands.command(name="위치설정",description="아르가 날씨를 알려줄 때 참고할 정보")
     @app_commands.describe(rlg="광역자치단체(Regional Local Government)")
