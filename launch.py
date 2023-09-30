@@ -38,7 +38,7 @@ async def on_ready():
 @bot.tree.command(name="싱크")
 async def sync_guild(interaction:ds.Interaction):
     try:
-        syncs = await bot.tree.sync(guild=bot.get_guild(interaction.guild.id))
+        syncs = await bot.tree.sync(guild=ds.Object(id=interaction.guild.id))
     except Exception as e:
         print(e)
         await interaction.response.send_message("^^^^^\n싱크에 실패했어.. TㅅT")

@@ -8,23 +8,16 @@ from cogs.neis import Neis
 from cogs.other import Other
 from cogs.custom_embed import CustomEmbed
 from cogs.weather import Weather
+from cogs.music import Music
 
 async def add_all(bot:commands.Bot):
-    cogs = [
-        {"name":"twitch","cog":Twitch(bot)},
-        {"name":"item","cog":ItemCog(bot)},
-        {"name":"Welcome","cog":Welcome(bot)},
-        {"name":"Neis","cog":Neis(bot)},
-        {"name":"Other","cog":Other(bot)},
-        {"name":"CustomEmbed","cog":CustomEmbed(bot)},
-        {"name":"Weather","cog":Weather(bot)}
-    ]
+    cogs = [Twitch,ItemCog,Welcome,Neis,Other,CustomEmbed,Weather,Music]
     
     for i in cogs:
         try:
-            await bot.add_cog(i["cog"])
-            print(f"'{i['name']}'cog를 불러오는 중...")
+            await bot.add_cog(i(bot))
+            print(f"'{i.__name__}'cog를 불러오는 중...")
         except Exception as e:
-            print("불러오기 실패\n\n" + e)
+            print("불러오기 실패\n\n" + str(e))
         else:
             print("불러오기 성공!")

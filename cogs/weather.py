@@ -16,6 +16,7 @@ class Weather(commands.Cog):
     
     @app_commands.command(name="오늘날씨",description="아르가 날씨를 알려줘!")
     async def todayweather(self, interaction:ds.Interaction):
+        await interaction.response.defer(ephemeral=True)
         with open("data\\weather.json","r",encoding="UTF-8") as file:
             weatherdata = json.load(file)
         if str(interaction.user.id) not in weatherdata['positions']:
@@ -26,7 +27,7 @@ class Weather(commands.Cog):
         with BytesIO() as image:
             getweatherimage(today_weather_data.items).save(image,"PNG")
             image.seek(0)
-            await interaction.response.send_message(file=ds.File(image,"today_weather.png"))
+            await interaction.followup.send(file=ds.File(image,"today_weather.png"),ephemeral=True)
     
     @app_commands.command(name="위치설정",description="아르가 날씨를 알려줄 때 참고할 정보")
     @app_commands.describe(rlg="광역자치단체(Regional Local Government)")
