@@ -1,8 +1,13 @@
 import discord as ds
 from discord import app_commands
 from discord.ext import commands
+from discord.ui import View,Button
 
 from os import scandir
+import json
+import random as rd
+from datetime import datetime as dt
+from time import time
 
 ## https://zephyrus1111.tistory.com/171
 def get_dir_size(path='.'):
@@ -24,6 +29,9 @@ def convert_size(size_bytes):
     s = round(size_bytes / p, 2)
     return "%s %s" % (s, size_name[i])
 
+#https://github.com/golbin/hubot-maxim/blob/master/data/maxim.json
+with open('info\\wise_sayings.json','r',encoding="utf-8") as file:
+    wise_sayings = json.load(file)
 
 class Other(commands.Cog):
     def __init__(self,bot:commands.Bot) -> None:
@@ -63,3 +71,27 @@ class Other(commands.Cog):
         embed.add_field(name="9시간 00분 수면",value=f"> ```{minute2time(sleeptime[3])}```\n")
         embed.add_field(name="",value="")
         await interaction.response.send_message(embed=embed)
+        
+    @app_commands.command(name="오늘의명언",description="아르가 오늘의 명언을 알려줘!")
+    async def todaywisesaying(self,interaction:ds.Interaction):
+        rd.seed(dt.now().strftime('%Y%m%d'))
+        
+        def embed()->ds.Embed:
+            wise = rd.choice(wise_sayings)
+            embed = ds.Embed(color=0xffd8ee,description=f"**```\"{wise['message']}\"```**")# < 256 | < 4096
+            embed.add_field(name="",value=f"from.{wise['author']}") # | < 1024
+            return embed
+        def embed2()->ds.Embed:
+            wise = rd.choice(wise_sayings)
+            embed = ds.Embed(color=0xffd8ee,title=f"\"{wise['message']}\"")
+            embed.add_field(name='',value=f"from.{wise['author']}")
+            return embed
+        
+        view = View()
+        retry = Button(label="🔄️다른 명언")
+        async def retrycallback(interaction:ds.Interaction):
+            rd.seed(time())
+            await interaction.response.edit_message(embed=embed())
+        retry.callback = retrycallback
+        view.add_item(retry)
+        await interaction.response.send_message(embed=embed(),view=view)
