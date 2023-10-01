@@ -34,22 +34,19 @@ class Music(commands.Cog):
                 await voice.move_to(interaction.user.voice.channel)        
                 self.nowvoice[str(interaction.guild.id)] = voice = await interaction.user.voice.channel.connect()
         
-        async def play_music(interaction:ds.Interaction):
+        def play_music(voice:ds.VoiceClient):
             if len(self.playing[str(interaction.guild.id)]) == 0:
-                await interaction.channel.send("노래가 모두 끝나 퇴장합니다")
-                voice.stop()
-                await voice.disconnect()
+                voice.loop.create_task(voice.disconnect())
                 return
             with ydl(ydl_options) as ydls:
                 info = ydls.extract_info(self.playing[str(interaction.guild.id)][0],download=False)
             URL = info['url']
-
-            voice.play(ds.FFmpegPCMAudio(URL,**FFMPEG_OPTIONS),after=play_music)
+            voice.play(ds.FFmpegPCMAudio(URL,**FFMPEG_OPTIONS),after=lambda I: play_music(voice))
             del self.playing[str(interaction.guild.id)][0]
     
         self.playing[str(interaction.guild.id)].append(link)
         if not voice.is_playing():
-            await play_music(interaction)
+            w = play_music(voice)
             await voice.voice_connect(True,False)
             await interaction.followup.send("노래를 재생합니다")
         else:
