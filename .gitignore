@@ -172,5 +172,5 @@ data/twitch.json
 data/visit.json
 data/weather.json
 
-# ffmpeg
-ffmpeg.exe
+# # ffmpeg
+# ffmpeg.exe
