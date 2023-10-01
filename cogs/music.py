@@ -32,7 +32,7 @@ class Music(commands.Cog):
                 await voice.move_to(interaction.user.voice.channel)        
                 self.nowvoice[str(interaction.guild.id)] = voice = await interaction.user.voice.channel.connect()
             else:
-                await interaction.response.send_message("이미 노래 재생중") ##################노래를 재생목록에 추가하는 기능(예정)
+                await interaction.followup.send("이미 노래 재생중") ##################노래를 재생목록에 추가하는 기능(예정)
                 return
 
         with ydl(ydl_options) as ydls:
