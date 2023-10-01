@@ -14,6 +14,7 @@ class Music(commands.Cog):
     def __init__(self,bot:commands.Bot) -> None:
         self.bot = bot
         self.nowvoice = {}
+        self.playing = {}
         
     @app_commands.command(name="재생",description="링크를 주면 아르가 노래를 들려줘!")
     async def musicplay(self,interaction:ds.Interaction,link:str):
@@ -22,7 +23,8 @@ class Music(commands.Cog):
             return
 
         await interaction.response.defer()
-        
+        if str(interaction.guild.id) not in self.playing:
+            self.playing[str(interaction.guild.id)] = []
         if str(interaction.guild.id) not in self.nowvoice:
             self.nowvoice[str(interaction.guild.id)] = voice = await interaction.user.voice.channel.connect()
         else:
@@ -31,17 +33,27 @@ class Music(commands.Cog):
                 await voice.disconnect()
                 await voice.move_to(interaction.user.voice.channel)        
                 self.nowvoice[str(interaction.guild.id)] = voice = await interaction.user.voice.channel.connect()
-            else:
-                await interaction.followup.send("이미 노래 재생중") ##################노래를 재생목록에 추가하는 기능(예정)
+        
+        async def play_music(interaction:ds.Interaction):
+            if len(self.playing[str(interaction.guild.id)]) == 0:
+                await interaction.channel.send("노래가 모두 끝나 퇴장합니다")
+                voice.stop()
+                await voice.disconnect()
                 return
+            with ydl(ydl_options) as ydls:
+                info = ydls.extract_info(self.playing[str(interaction.guild.id)][0],download=False)
+            URL = info['url']
 
-        with ydl(ydl_options) as ydls:
-            info = ydls.extract_info(link,download=False)
-        URL = info['url']
-
-        await voice.voice_connect(True,False)
-        voice.play(ds.FFmpegPCMAudio(URL,**FFMPEG_OPTIONS))
-        await interaction.followup.send("노래를 재생합니다")
+            voice.play(ds.FFmpegPCMAudio(URL,**FFMPEG_OPTIONS),after=play_music)
+            del self.playing[str(interaction.guild.id)][0]
+    
+        self.playing[str(interaction.guild.id)].append(link)
+        if not voice.is_playing():
+            await play_music(interaction)
+            await voice.voice_connect(True,False)
+            await interaction.followup.send("노래를 재생합니다")
+        else:
+            await interaction.followup.send("노래가 재생중이라 대기열에 추가됩니다")
     
     @app_commands.command(name="일시정지",description="노래를 잠깐 멈춰줄게!")
     async def musicpause(self,interaction:ds.Interaction):
