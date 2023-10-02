@@ -9,6 +9,7 @@ from cogs.other import Other
 from cogs.custom_embed import CustomEmbed
 from cogs.weather import Weather
 from cogs.music import Music
+from cogs.law import Law
 
 async def add_all(bot:commands.Bot):
     cogs = [Twitch,ItemCog,Welcome,Neis,Other,CustomEmbed,Weather,Music]

@@ -95,3 +95,8 @@ class Other(commands.Cog):
         retry.callback = retrycallback
         view.add_item(retry)
         await interaction.response.send_message(embed=embed(),view=view)
+    
+    @app_commands.command(name="대신말하기")
+    async def resend(self,i:ds.Interaction,msg:str):
+        await i.response.send_message(msg,delete_after=0)
+        await i.channel.send(msg)

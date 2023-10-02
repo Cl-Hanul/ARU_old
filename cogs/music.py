@@ -69,7 +69,7 @@ class Music(commands.Cog):
         voice:ds.VoiceClient = self.nowvoice[str(interaction.guild.id)]
         
         voice.pause()
-        await interaction.response.send_message("지금 노래는 멈춰있어!",ephemeral=True)
+        await interaction.response.send_message("지금 노래는 멈춰있어!")
     
     @app_commands.command(name="다시재생",description="일시정지한 노래를 다시 재생해줘!")
     async def musicresume(self,interaction:ds.Interaction):
@@ -83,7 +83,7 @@ class Music(commands.Cog):
         voice:ds.VoiceClient = self.nowvoice[str(interaction.guild.id)]
         
         voice.resume()
-        await interaction.response.send_message("노래를 다시 재생해줄게!",ephemeral=True)
+        await interaction.response.send_message("노래를 다시 재생해줄게!")
     
     @app_commands.command(name="노래멈춰",description="노래.. 그만들을꺼야..?") 
     async def musicresume(self,interaction:ds.Interaction):
