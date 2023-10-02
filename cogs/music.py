@@ -27,12 +27,16 @@ class Music(commands.Cog):
             self.playing[str(interaction.guild.id)] = []
         if str(interaction.guild.id) not in self.nowvoice:
             self.nowvoice[str(interaction.guild.id)] = voice = await interaction.user.voice.channel.connect()
+            if type(voice.channel) == ds.StageChannel:
+                await interaction.guild.me.edit(suppress=False)
         else:
             voice:ds.VoiceClient = self.nowvoice[str(interaction.guild.id)]
             if voice.channel != interaction.user.voice.channel:
                 await voice.disconnect()
-                await voice.move_to(interaction.user.voice.channel)        
+                await voice.move_to(interaction.user.voice.channel)
                 self.nowvoice[str(interaction.guild.id)] = voice = await interaction.user.voice.channel.connect()
+                if type(voice.channel) == ds.StageChannel:
+                    await interaction.guild.me.edit(suppress=False)
         
         def play_music(voice:ds.VoiceClient):
             if len(self.playing[str(interaction.guild.id)]) == 0:
@@ -107,5 +111,6 @@ class Music(commands.Cog):
         await voice.disconnect()
         await voice.move_to(interaction.user.voice.channel)        
         self.nowvoice[str(interaction.guild.id)] = voice = await interaction.user.voice.channel.connect()
-        
+        if type(voice.channel) == ds.StageChannel:
+            await interaction.guild.me.edit(suppress=False)
         await interaction.response.send_message(f"아르는 {interaction.user.voice.channel.mention} 여기로 잡혀갔어..")
