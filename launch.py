@@ -32,6 +32,10 @@ async def on_ready():
     await bot.tree.sync()
     print('완료!')
     
+    #ratelimit 확인
+    if bot.tree.client.is_ws_ratelimited():
+        print("현재 ratelimit 상태입니다")
+    
     #상태 변경
     await bot.change_presence(activity=ds.Activity(name='=͟͟͞͞ ͟͟͞͞𖤐 아르는 `~help`를',type=ds.ActivityType.listening))
 
