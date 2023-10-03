@@ -29,7 +29,7 @@ async def on_ready():
     
     #슬래시 커맨드 싱크
     print('명령어를 싱크하는 중...')
-    await bot.tree.sync(guild=ds.Object(id=1139096712221294612))
+    await bot.tree.sync()
     print('완료!')
     
     #상태 변경

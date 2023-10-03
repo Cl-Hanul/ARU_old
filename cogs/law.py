@@ -13,10 +13,7 @@ class Law(commands.Cog):
         app_commands.Choice(name="법령 제목으로 검색", value=1),
         app_commands.Choice(name="법령 본문으로 검색", value=2)
     ])
-    @app_commands.describe(
-        query="법령을 검색할 내용입니다",
-        searchtype="법령을 검색할 방법입니다"
-    )
+    @app_commands.describe(query="법령을 검색할 내용입니다",searchtype="법령을 검색할 방법입니다")
     async def searchlaw(self,interaction:ds.Interaction,searchtype:app_commands.Choice[int],query:str):
         lawdata = SearchLaw(searchtype.value,query)
         if not lawdata:

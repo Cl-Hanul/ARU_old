@@ -86,7 +86,7 @@ class Music(commands.Cog):
         await interaction.response.send_message("노래를 다시 재생해줄게!")
     
     @app_commands.command(name="노래멈춰",description="노래.. 그만들을꺼야..?") 
-    async def musicresume(self,interaction:ds.Interaction):
+    async def musicstop(self,interaction:ds.Interaction):
         if not interaction.user.voice:
             await interaction.response.send_message("`보이스채널`에 들어간 뒤에 사용해줘!")
             return

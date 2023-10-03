@@ -12,7 +12,7 @@ from cogs.music import Music
 from cogs.law import Law
 
 async def add_all(bot:commands.Bot):
-    cogs = [Twitch,ItemCog,Welcome,Neis,Other,CustomEmbed,Weather,Music]
+    cogs = [Twitch,ItemCog,Welcome,Neis,Other,CustomEmbed,Weather,Music,Law]
     
     for i in cogs:
         try:
