@@ -124,7 +124,7 @@ class Music(commands.Cog):
         
         voice.stop()
         await voice.disconnect()
-        await interaction.response.send_message("그만 불러줄게!",ephemeral=True)
+        await interaction.response.send_message("그만 불러줄게!")
     
     @app_commands.command(name="일로와",description="아르라는 가수를 납치합니다")
     async def movehere(self,interaction:ds.Interaction):
