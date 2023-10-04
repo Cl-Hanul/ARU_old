@@ -38,7 +38,7 @@ class Music(commands.Cog):
                 if type(voice.channel) == ds.StageChannel:
                     await interaction.guild.me.edit(suppress=False)
         
-        def play_music(voice:ds.VoiceClient):
+        def play_music(voice:ds.VoiceClient,looping:bool):
             del self.playing[str(interaction.guild.id)][0]
             if len(self.playing[str(interaction.guild.id)]) == 0:
                 voice.stop()
@@ -55,15 +55,17 @@ class Music(commands.Cog):
             URL = info['url']
             embed = ds.Embed(title=info['title'],description=info['uploader'],url=info['original_url'])
             embed.set_thumbnail(url=info['thumbnail'])
-            voice.loop.create_task(interaction.channel.send(embed=embed))
-            voice.play(ds.FFmpegPCMAudio(URL,**FFMPEG_OPTIONS),after=lambda I: play_music(voice))
+            embed.set_author(name="현재 재생중..!!",url=f"https://discord.com/channels/{voice.guild.id}/{voice.channel.id}")
+            if looping:
+                voice.loop.create_task(interaction.channel.send(embed=embed))
+            voice.play(ds.FFmpegPCMAudio(URL,**FFMPEG_OPTIONS),after=lambda I: play_music(voice,True))
+            return embed
 
         self.playing[str(interaction.guild.id)].append(link)
         if not voice.is_playing():
             self.playing[str(interaction.guild.id)].insert(0,None)
             await voice.voice_connect(True,False)
-            await interaction.followup.send("노래를 재생합니다")
-            play_music(voice)
+            await interaction.followup.send("노래를 재생합니다",embed=play_music(voice,False))
         else:
             await interaction.followup.send("노래가 재생중이라 대기열에 추가됩니다")
     
@@ -105,6 +107,7 @@ class Music(commands.Cog):
             await interaction.response.send_message("노래를 `재생` 한 뒤에 사용해줘!")
             return
         
+        await interaction.response.send_message("현재 노래를 건너뛰고 다음 노래를 재생합니다")
         voice:ds.VoiceClient = self.nowvoice[str(interaction.guild.id)]
         voice.stop()
     
