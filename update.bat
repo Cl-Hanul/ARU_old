@@ -1,1 +1,1 @@
-git clone github.com/cl-hanul/ARU
+git clone http://github.com/cl-hanul/ARU
