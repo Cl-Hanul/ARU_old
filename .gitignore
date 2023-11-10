@@ -171,6 +171,7 @@ data/neis.json
 data/twitch.json
 data/visit.json
 data/weather.json
+data/artto.json
 
 # # ffmpeg
 # ffmpeg.exe
