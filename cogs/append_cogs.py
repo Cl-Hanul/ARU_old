@@ -23,7 +23,7 @@ async def add_all(bot:commands.Bot):
         Weather,
         Music,
         #Law,
-        #ArttoCog
+        ArttoCog
     ]
     
     for i in cogs:

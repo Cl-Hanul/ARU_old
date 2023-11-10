@@ -6,6 +6,7 @@ import json
 from datetime import datetime
 import asyncio
 import aiohttp
+from random import randint
 
 from bs4 import BeautifulSoup as BS
 
@@ -27,17 +28,24 @@ class ArttoCog(commands.Cog):
     async def loadnumber(self):
         with open('data\\artto.json',"r") as file:
             arttodata = json.load(file)
-        # if not (datetime.today() - datetime(arttodata['last_date']['year'],arttodata['last_date']['mouth'],arttodata['last_date']['day'],22,0,0)).days > 6:
-        #     return
+        if not (datetime.today() - datetime(arttodata['last_date']['year'],arttodata['last_date']['month'],arttodata['last_date']['day'],22,0,0)).days > 6:
+            return
         
         balls = await getball()
         
-        embed = ds.Embed(color=0xffd8ee,title="새로운 로또 추첨!",description="당첨되었는지 확인해보세요!")
+        arttodata['now_round'] += 1
+        arttodata['last_date'] = {"year": datetime.now().year, "month": datetime.now().month, "day": datetime.now().day-((datetime.now().weekday() + 2) - (7 if datetime.now().weekday() in [5,6] else 0))}
+        arttodata['win_number'][str(arttodata['now_round'])] = balls
+        
+        with open('data\\artto.json','w') as file:
+            json.dump(arttodata,file)
+        
+        embed = ds.Embed(color=0xffd8ee,title=f"알또 제 {arttodata['now_round']}회 당첨번호!",description="당첨되었는지 확인해보세요!")
         embed.add_field(name=' '.join(balls),value='')
         for channelid in arttodata['tell_channel']:
             channel = self.bot.get_channel(channelid)
             await channel.send(embed=embed)
-        
+
 
     @app_commands.command(name="알또구매",description="알또를 구매합니다 (아르코인 10/한 줄)")
     @app_commands.describe(
@@ -75,18 +83,22 @@ class ArttoCog(commands.Cog):
             if interaction.user.id not in arttodata['userdata']:
                 arttodata['userdata'][str(interaction.user.id)] = {"artto":[]}
         userartto = arttodata['userdata'][str(interaction.user.id)]
-        userartto['artto'].append({'number':[
-            get_number(line1),
-            get_number(line2),
-            get_number(line3),
-            get_number(line4),
-            get_number(line5)
-        ]})
+        artto = {'number':[],"round":arttodata['now_round']}
+        for line in [line1,line2,line3,line4,line5]:
+            if line == 'j':
+                linetest = ['Jadong']+[randint(1,45) for i in range(6)]
+            elif get_number(line):
+                linetest = ['Sudong']+get_number(line)    
+            else:
+                continue
+            artto['number'].append(linetest)
+        userartto['artto'].append(artto)
         
         embed = ds.Embed(title="알또로또 제 n회",description="결과발표일 ****년 **월 **일 ",color=0xffd8ee)
-        for line in userartto['artto'][-1]['number']:
+        for line in artto['number']:
             if line != None:
-                embed.add_field(name=" ".join(line),value="",inline=False)
+                print(artto['number'])
+                embed.add_field(name=f"{'자동 | ' if line[0] == 'Jadong' else '수동 | '}{' '.join(map(str,line[1:]))}",value="",inline=False)
         
         if len(embed.fields) == 0:
             del userartto['artto'][-1]
@@ -111,3 +123,20 @@ class ArttoCog(commands.Cog):
             await interaction.response.send_message(f"<#{tellchannel.id}>의 알또 알림채널을 설정해제했습니다~!")
         with open('data\\artto.json','w') as file:
             json.dump(arttodata,file)
+    
+    @app_commands.command(name='알또당첨확인',description="구매한 알또의 당첨 여부를 확인할 수 있어요!")
+    @app_commands.describe(
+        rounds="알또의 회차 수"
+    )
+    async def checkartto(self,interaction:ds.Interaction,rounds:str):
+        with open('data\\artto.json','r') as file:
+            arttodata = json.load(file)
+        if rounds not in arttodata['win_number']:
+            await interaction.response.send_message("회차 데이터가 존재하지 않아!")
+            return
+        embed = ds.Embed(color=0xffd8ee,title=f"알또 제 {rounds}회 당첨번호!",description="")
+        embed.add_field(name=f"당첨번호",value="보너스")
+        embed.add_field(name=f" | ",value=" | ")
+        embed.add_field(name=f"{' '.join(map(str,arttodata['win_number'][rounds][:-2]))}",
+                        value=f"{arttodata['win_number'][rounds][-1]}")
+        await interaction.response.send_message(embed=embed)
