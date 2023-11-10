@@ -81,15 +81,21 @@ class ItemCog(commands.Cog):
         await interaction.response.send_message("아이템을 제작하였습니다\n제작된 아이템:",embed=embed)
     
     @item.command(name="정보",description="자신이 소지하고 있는 아이템의 정보를 알려줍니다.")
-    async def iteminfo(self, interaction:ds.Interaction):
+    async def iteminfo(self, interactions:ds.Interaction):
         with open('data\\item.json', encoding="UTF8") as file:
             items = json.load(file)
         
         async def callbacky(interaction:ds.Interaction):
+            if interaction.user.id != interactions.user.id:
+                await interaction.response.send_message("본인의 아이템만 조작 가능해요!",ephemeral=True)
+                return
             embed = ds.Embed(title=f'{eval(itemselect.values[0])["name"]} Lv.{eval(itemselect.values[0])["lvl"]}',description=eval(itemselect.values[0])["description"])
             viewe = View()
             upgrade = Button(style=ds.ButtonStyle.green,label="⬆️강화")
             async def itemupgrade(interaction:ds.Interaction):
+                if interaction.user.id != interactions.user.id:
+                    await interaction.response.send_message("본인의 아이템만 조작 가능해요!",ephemeral=True)
+                    return
                 with open('data\\item.json',encoding="UTF8") as file:
                     myitems = json.load(file)
                 viewe = View()
@@ -137,14 +143,16 @@ class ItemCog(commands.Cog):
             viewe.add_item(itemselect)
             await interaction.response.edit_message(content="",embed=embed,view=viewe)
         async def callbackn(interaction:ds.Interaction):
+            if interaction.user.id != interactions.user.id:
+                await interaction.response.send_message("본인의 아이템만 조작 가능해요!",ephemeral=True)
+                return
             await interaction.message.delete()
-        
         viewd = View()
-        if str(interaction.user.id) not in items:
+        if str(interactions.user.id) not in items:
             itemselect = Select(options=[ds.SelectOption(label="현재 아무 아이템도 소지하고 있지 않아!",value="no",description="`/아이템 제작`로 아이템을 만들어줘!")])
             itemselect.callback = callbackn
         else:
-            itemselect = Select(options=[ds.SelectOption(label=item["name"],value=str(item),description=item["lvl"]) for item in items[str(interaction.user.id)]])
+            itemselect = Select(options=[ds.SelectOption(label=item["name"],value=str(item),description=item["lvl"]) for item in items[str(interactions.user.id)]])
             itemselect.callback = callbacky
         viewd.add_item(itemselect)
-        await interaction.response.send_message("정보를 원하는 아이템을 골라주세요",view=viewd,ephemeral=True)
+        await interactions.response.send_message("정보를 원하는 아이템을 골라주세요",view=viewd,ephemeral=False)

@@ -9,7 +9,7 @@ from json import dump
 os.system('pip install -r requirements.txt')
 
 #데이터 베이스 추가
-for filedata in [["item","{}"],['neis','{"meal":{},"school":{}}'],['twitch',"{}"],['visit',"{}"],['weather','{"positions": {}}']]:
+for filedata in [["item","{}"],['neis','{"meal":{},"school":{}}'],['twitch',"{}"],['visit',"{}"],['weather','{"positions": {}}'],['artto','{}']]:
     try:
         with open("data\\"+filedata[0]+".json","x",encoding="UTF8") as file:
             file.write(filedata[1])

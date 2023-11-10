@@ -10,9 +10,21 @@ from cogs.custom_embed import CustomEmbed
 from cogs.weather import Weather
 from cogs.music import Music
 from cogs.law import Law
+from cogs.artto import ArttoCog
 
 async def add_all(bot:commands.Bot):
-    cogs = [Twitch,ItemCog,Welcome,Neis,Other,CustomEmbed,Weather,Music,Law]
+    cogs = [
+        Twitch,
+        ItemCog,
+        Welcome,
+        Neis,
+        Other,
+        CustomEmbed,
+        Weather,
+        Music,
+        #Law,
+        #ArttoCog
+    ]
     
     for i in cogs:
         try:
